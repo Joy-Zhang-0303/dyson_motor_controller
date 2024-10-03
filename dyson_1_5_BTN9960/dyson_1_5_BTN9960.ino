@@ -1,5 +1,5 @@
 // To drive Dyson V10 DDM Motor using Arduino UNO R3 and Infineon BNT9960 NovalithIC 2.0
-// H.Zhang, 2024-09-30
+// H.Zhang, 2024-09-30 
 #define HALL_EFFECT 2
 
 // H-Bridge Arduino Shield with BTN9960 NovalithIC 2.0
@@ -22,32 +22,34 @@
 
 void disable_driver()
 {
-  // digitalWrite(INH1, 0);
+  // digitalWrite(INH1, 0); 
   // digitalWrite(INH2, 0);
-  PORTB &= 0b11001111;
+  PORTB &= 0b11011111; // D13 -> 0
+  PORTD &= 0b11110111; // D3 -> 0
 }
 
 void enable_driver()
 {
   // digitalWrite(INH1, 1);
   // digitalWrite(INH2, 1);
-  PORTB |= 0b00110000;
+  PORTB |= 0b00100000; // D13 -> 1
+  PORTD |= 0b00001000; // D3 -> 1
 }
 
 void forward()
 {
-  // digitalWrite(IN1, 1);
-  // digitalWrite(IN2, 0);
-  PORTD |= 0b00001000;
-  PORTB &= 0b11110111;
+  // digitalWrite(IN1, 1); // D10
+  // digitalWrite(IN2, 0); // D9
+  // PORTB &= 0b11111101; // D9 -> 0
+  // PORTB |= 0b00000100; // D10 -> 1   
+  PORTB = (PORTB & 0b11111101) | 0b00000100;
 }
 
 void reverse()
 {
-  // digitalWrite(IN1, 0);
-  // digitalWrite(IN2, 1);
-  PORTD &= 0b11110111;
-  PORTB |= 0b00001000;
+  // digitalWrite(IN1, 0); // D10
+  // digitalWrite(IN2, 1); // D9
+  PORTB = (PORTB & 0b11111011) | 0b00000010;
 }
 
 void head_start()
